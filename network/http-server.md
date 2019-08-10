@@ -4,16 +4,18 @@
 
 ![HTTP Server](../snapshots/http-server.jpg)
 
-## 事件
+## 监听事件
 
-- **checkContinue**：遇 `Expect: 100 continue` 请求时触发
-- **checkExpectation**：遇 `Expect` 请求时触发
-- **connect**：当客户端的 HTTP 请求方法为 CONNECT 方法时触发
-- **connection**：当 TCP 连接建立时触发，大部分时候可以忽略这个事件。此外，可以通过 `req.connection` 来获取这个 Socket（从 Node.js 源码来看，`req.socket` 和 `req.socket` 都指向了这个 socket）。此外，socket 上的 readable 事件不会触发
-- **request**：每次请求触发
-- **upgrade**：客户端请求 HTTP 升级时触发
-- **clientError**：客户端连接异常
-- **close**：关闭服务器
+| 事件             | 描述                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| checkContinue    | 遇 `Expect: 100 continue` 请求时触发                         |
+| checkExpectation | 遇 `Expect` 请求头时触发                                     |
+| connect          | 当客户端的 HTTP 请求方法为 CONNECT 方法时触发                |
+| connection       | 当 TCP 连接建立时触发，大部分时候可以忽略这个事件。此外，可以通过 `req.connection` 来获取这个 Socket（从 Node.js 源码来看，`req.socket` 和 `req.socket` 都指向了这个 socket）。此外，socket 上的 readable 事件不会触发 |
+| request          | 每次请求触发                                                 |
+| upgrade          | 客户端请求 HTTP 升级时触发                                   |
+| clientError      | 客户端连接异常                                               |
+| close            | 关闭服务器                                                   |
 
 ## 配置属性
 
