@@ -30,7 +30,7 @@ module.exports = {
       {
         title: 'I/O',
         collapsable: false,
-        children: ['io', 'stream', 'buffer', 'filesystem', 'path'].map(r => setPrefix('io', r)),
+        children: ['io', 'stream/stream', 'stream/readable', 'stream/writable', 'buffer', 'filesystem', 'path'].map(r => setPrefix('io', r)),
       },
       {
         title: '进程',
