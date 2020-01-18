@@ -1,5 +1,5 @@
 const generateSidebar = require('./generateSidebar');
-const name = 'Node-Guidebook';
+const name = 'node-guidebook';
 
 const setPrefix = (base, route) => `${base}/${route}`;
 
@@ -60,7 +60,7 @@ module.exports = {
         ].map(r => setPrefix('network', r)),
       },
       {
-        title: '命令行指令',
+        title: '指令',
         collapsable: false,
         children: ['npm', 'npx', 'nrm', 'nvm'].map(r => setPrefix('3m', r)),
       },
@@ -76,7 +76,7 @@ module.exports = {
 
   vueThemes: {
     links: {
-      github: 'https://github.com/tsejx/Node-Guidebook',
+      github: 'https://github.com/tsejx/node-guidebook',
     },
   },
 };
