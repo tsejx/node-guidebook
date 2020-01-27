@@ -18,11 +18,31 @@ const u = new URL('https://example.org:8888');
 console.log(u.port);
 // 输出：8888
 
-
 // 默认端口号将自动转换为空字符串
 // HTTPS 协议默认端口是 443
 u.port = '443';
-console.log(u);
-// 打印空字符串
+console.log(u.port);
+// 输出：（空）
 console.log(u.href);
 // 输出：https://example.org/
+
+// 完全无效的端口字符串将被忽略
+u.port = 'abcd';
+console.log(u.port);
+// 输出：（空）
+
+// 开头的数字将会被当作端口号
+u.port = '5678abcd';
+console.log(u.port);
+// 输出：5678
+
+// 非整型数字将会被截断
+u.port = 1234.5678;
+console.log(u.port);
+// 输出：1234
+
+// 超出范围的数字将被忽略
+u.port = 1e10;
+// 10000000000，将按如下所述进行范围检查
+console.log(u.port);
+// 输出：1234
