@@ -1,0 +1,14 @@
+{
+  "name": "node-guidebook-example",
+  "version": "1.0.0",
+  "description": "Record Node.js API snippets example.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "Node.js",
+    "NodeJS",
+    "Node"
+  ],
+  "author": "",
+  "license": "MIT"
+}
