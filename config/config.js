@@ -1,14 +1,15 @@
-export default {
+const config = {
   mode: 'site',
   title: 'Node Guidebook',
   description: 'Node 完全知识体系',
   base: '/node-guidebook/',
   publicPath: '/node-guidebook/',
   favicon: './favicon.ico',
-  logo: './favicon.svg',
+  logo: 'http://img.mrsingsing.com/node-guidebook-favicon.svg',
   exportStatic: {},
+  dynamicImport: {},
   theme: {
-    '@primary-color': '#3d8e96',
+    '@c-primary': '#3d8e96',
   },
   navs: [
     null,
@@ -18,3 +19,9 @@ export default {
     },
   ],
 };
+
+if (process.env.NODE_ENV !== 'development') {
+  config.ssr = {};
+}
+
+export default config;

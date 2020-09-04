@@ -4,11 +4,11 @@
   "description": "A technical mannual about Node knowledge",
   "main": "index.js",
   "scripts": {
+    "start": "yarn run dev",
     "dev": "yarn run dumi dev --port=8070",
     "lint:md": "lint-md *.md",
     "lint:fix": "lint-md *.md --fix",
-    "build": "yarn run dumi build",
-    "deploy": "bash ./scripts/deploy.sh"
+    "build": "yarn run dumi build"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   "license": "MIT",
   "homepage": "https://tsejx.github.io/node-guidebook/",
   "devDependencies": {
-    "dumi": "^1.0.20",
+    "dumi": "^1.0.34",
     "lint-md": "^0.2.0"
   }
 }
