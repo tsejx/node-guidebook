@@ -6,8 +6,8 @@
   "scripts": {
     "start": "yarn run dev",
     "dev": "yarn run dumi dev --port=8070",
-    "lint:md": "lint-md *.md",
-    "lint:fix": "lint-md *.md --fix",
+    "lint:md": "node lint-md *.md",
+    "lint:fix": "node lint-md *.md --fix",
     "build": "yarn run dumi build"
   },
   "repository": {
@@ -27,7 +27,7 @@
   "license": "MIT",
   "homepage": "https://tsejx.github.io/node-guidebook/",
   "devDependencies": {
-    "dumi": "^1.0.34",
+    "dumi": "^1.1.3",
     "lint-md": "^0.2.0"
   }
 }

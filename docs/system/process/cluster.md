@@ -5,7 +5,7 @@ nav:
 group:
   title: 进程
   order: 1
-title: 集群
+title: 集群 cluster
 order: 3
 ---
 
@@ -176,3 +176,19 @@ process.send(message);
 - [📝 Node.js：浅析高并发与分布式集群](https://zhuanlan.zhihu.com/p/41118827)
 - [📝 淘宝前端：当我们谈论 cluster 时我们在谈论什么](https://fed.taobao.org/blog/2015/11/04/nodejs-cluster/)
 - [📝 Node.js cluster 模块深入研究](https://www.cnblogs.com/accordion/p/7207740.html)
+
+---
+
+- [理解 Node.js 中的多线程](https://zhuanlan.zhihu.com/p/74879045)
+- [深入理解 Node.js 进程与线程](https://zhuanlan.zhihu.com/p/77733656)
+- [多进程 & Node.js Web 实现](https://zhuanlan.zhihu.com/p/165131406)
+- [Node.js 集群（Cluster）：扩展你的 Node.js 应用](https://zhuanlan.zhihu.com/p/36728299)
+- [Node.js Cluster 模块深入研究](https://zhuanlan.zhihu.com/p/28319632)
+- [Node.js 源码阅读：多进程架构的演进之路与 eggjs 多进程架构实践](https://zhuanlan.zhihu.com/p/34912873)
+- [EggCluster 是如何解决多进程模式下相关问题的](https://zhuanlan.zhihu.com/p/128066894)
+- [Node 多进程的创建与维护](https://zhuanlan.zhihu.com/p/100550801)
+- [nodejs 创建线程问题](https://zhuanlan.zhihu.com/p/181729061)
+- [Nodejs 单线程为什么能支持高并发？](https://zhuanlan.zhihu.com/p/61807318)
+- [如何解决 nodejs 中 cpu 密集型的任务](https://zhuanlan.zhihu.com/p/220478526)
+- [Node.js 真·多线程 Worker Threads 初探](https://zhuanlan.zhihu.com/p/52455566)
+- [Node 黑魔法之无痛用线上多线程](https://zhuanlan.zhihu.com/p/35353355)

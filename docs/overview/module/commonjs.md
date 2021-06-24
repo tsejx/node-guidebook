@@ -11,7 +11,7 @@ order: 1
 
 # CommonJS
 
-Node 应用由模块组成，采用 CommonJS 模块规范。
+Node.js 应用由模块组成，采用 CommonJS 模块规范。
 
 每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。
 
@@ -27,7 +27,7 @@ CommonJS 模块的特点：
 
 ## module
 
-Node 内部提供一个 [Module](https://github.com/nodejs/node/blob/master/lib/internal/modules/cjs/loader.js) 构建函数。所有模块都是 Module 的实例。
+Node.js 内部提供一个 [Module](https://github.com/nodejs/node/blob/master/lib/internal/modules/cjs/loader.js) 构建函数。所有模块都是 Module 的实例。
 
 ```js
 // 非 Node NativeModule

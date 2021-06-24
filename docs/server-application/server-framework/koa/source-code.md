@@ -110,7 +110,7 @@ module.exports = class Application extends Emitter {
     // 如果是 Generator 函数，则需要通过 koa-convert 转换成类似类 async/await 函数
     // 其核心原理是将 Generator 函数和自动执行器，包装在一个函数里
     if (isGeneratorFunction(fn)) {
-        fn = convert(fn);
+      fn = convert(fn);
     }
 
     // 将中间件加入 middleware 数组中
@@ -126,7 +126,6 @@ module.exports = class Application extends Emitter {
 
     // 该函数会作为参数传递给上文 listen 函数中的 http.createServer 函数，
     const handleRequest = (req, res) => {
-
       // 基于 req 和 res，封装一个更强大的 context 应用上下文对象
       const ctx = this.createContext(req, res);
 
@@ -138,13 +137,13 @@ module.exports = class Application extends Emitter {
   }
 
   handleRequest(ctx, fnMiddleware) {
-      // 处理回调函数的请求
+    // 处理回调函数的请求
   }
 
   // 基于 req 和 res 对象，创建 context 应用上下文对象
   createContext(req, res) {
-      // 封装新层 request、response 和 context 对象
-      // 并将 req 和 res 挂载到 context 对象上
+    // 封装新层 request、response 和 context 对象
+    // 并将 req 和 res 挂载到 context 对象上
   }
 };
 ```
@@ -192,15 +191,15 @@ module.exports = {
   // 在 application.js 中的 createContext 函数中，会把 Node 服务器的 req 对象作为 request 对象的属性，
   // request 对象会基于 req 封装很多便利的函数和属性
   get header() {
-      return this.req.headers;
+    return this.req.headers;
   },
 
   set header(val) {
-      this.req.headers = val;
+    this.req.headers = val;
   },
 
   // 省略了大量类似的工具属性和方法
-}
+};
 ```
 
 `response.js` 与 `request.js` 实现类似，主要是基于 Node.js 服务器的 `res` 对象，封装一系列便利的函数和属性。
@@ -406,8 +405,8 @@ Koa 的中间件本质就是一个 `async` 函数，形如：
 
 ```js
 async (ctx, next) => {
-  await next()
-}
+  await next();
+};
 ```
 
 该函数接受两个参数：
@@ -462,7 +461,6 @@ app.listen(3000, () => {
 `compose` 函数接收一个 `middleware` 数组作为参数，返回一个函数，给函数传入 `ctx` 时第一个中间件将自动执行，以后的中间件只有在手动调用 `next`，即 `dispatch` 时才会执行。从代码实现可以看出，中间件的执行是异步的，并且中间件执行完毕后返回的是一个 Promise，每个 `dispatch` 的返回值也是一个 Promise，因此我们的中间件执行完毕后返回的是一个 Promise，每个 `dispatch` 的返回值也是一个 Promise，因此我们的中间件中可以方便地使用 `async` 函数进行定义，内部使用 `await next()` 调用下游，然后控制流回上游，这是更准确也更友好的中间件模型。
 
 从下面的代码可以看到，中间件顺利执行完毕后将执行 `respond` 函数，失败后将执行 `ctx` 的 `onerror` 函数。`onFinished(res, onerror)` 这段代码是对响应处理过程中的错误监听，即 `handleResponse` 发生的错误或自定义的响应处理中发生的错误。
-
 
 ```js
 compose(middleware) {
@@ -560,8 +558,6 @@ app.on('error', err => {
 
 这样我们就实现了框架层面上的错误的捕获和监听机制了。总结一下，错误处理和捕获，分中间件的错误处理捕获和框架层的错误处理捕获，中间件的错误处理用 Promise 的 `catch`，框架层面的错误处理用 Node.js 的原生模块 Events，这样我们就可以把一个服务器实例上的所有的错误异常全部捕获到了。至此，我们就完整实现了一个轻量版的 Koa 框架了。
 
-
-
 ---
 
 **参考资料：**
@@ -577,52 +573,51 @@ app.on('error', err => {
 Express 的设计是串联，设计思路超级简洁。
 Koa 的某个中间件可以自行选择之后中间件的执行位置。
 
-
 ## koa-convert
-
-
 
 handleRequest：
 
 - 根据 `req` 和 `res` 创建 `context` 对象
 - 执行 Koa 实例的 `handleRequest` 函数（注意区分两个 `handleRequest` 函数）；Koa 实例的 `handleRequest` 函数通过其最后一行代码，开启中间件函数的洋葱式调用
 
-
 两个关键疑问：
 
 1. koa-compose 对 middleware 做了什么
 2. 如何实现洋葱式调用
 
-
 运行中间件：
 
 ```js
-return fnMiddleware(ctx).then(handleResponse).catch(onerror)
+return fnMiddleware(ctx)
+  .then(handleResponse)
+  .catch(onerror);
 ```
 
 fnMiddleware 的实现：
 
 ```js
-return function (context, next) {
+return function(context, next) {
   let index = -1;
-  return dispatch(0)
+  return dispatch(0);
 
   function dispatch(i) {
-    if (i < index) return Promise.reject(new Error('next() called multiple times'))
+    if (i < index) return Promise.reject(new Error('next() called multiple times'));
 
-    index = i
-    let fn = middleware[i]
+    index = i;
+    let fn = middleware[i];
     if (i === middleware.length) fn = next;
-    if (!fn) return Promise.resolve()
+    if (!fn) return Promise.resolve();
     try {
-      return Promise.resolve(fn(context, function next() {
-        return dispatch(i + 1)
-      }))
-    } catch(err) {
-      return Promise.reject(err)
+      return Promise.resolve(
+        fn(context, function next() {
+          return dispatch(i + 1);
+        })
+      );
+    } catch (err) {
+      return Promise.reject(err);
     }
   }
-}
+};
 ```
 
 ---
@@ -630,3 +625,4 @@ return function (context, next) {
 **参考资料：**
 
 - [可能是目前市面上比较有诚意的 Koa2 源码解读](https://zhuanlan.zhihu.com/p/34797505)
+- [腾讯 IVWEB 团队：Koa2 框架原理解析和实现](https://juejin.im/post/6844903709592256525)
