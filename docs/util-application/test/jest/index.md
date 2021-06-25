@@ -26,7 +26,6 @@ order: 2
 - Watch Plugins
 - Processor
 - Presets
-
 - `test` 方法：Jest 封装的测试方法，一般填写两个参数，测试用例描述和测试方法
 - `expect` 方法：预期方法，就是你调用了什么方法，传递了什么参数，得到的预期是什么
 

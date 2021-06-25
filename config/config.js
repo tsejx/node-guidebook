@@ -7,7 +7,7 @@ const config = {
   favicon: './favicon.ico',
   logo: 'http://img.mrsingsing.com/node-guidebook-favicon.svg',
   exportStatic: {},
-  dynamicImport: {},
+  // dynamicImport: {},
   theme: {
     '@c-primary': '#3d8e96',
   },
