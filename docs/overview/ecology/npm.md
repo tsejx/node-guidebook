@@ -5,15 +5,15 @@ nav:
 group:
   title: 生态
   order: 3
-title: npm
+title: npm 包描述文件
 order: 1
 ---
 
-# NPM
+# NPM 包描述文件
 
-npm 即 npde package module
+`npm` 即 npde package module
 
-CommonJS 的包规范的定义由包结构和包描述文件两个部分组成，前者用于组织包中的各种文件，后者则用于描述包的相关信息，以供外部读取分析。
+CommonJS 的包规范的定义由 **包结构** 和 **包描述文件** 两个部分组成，前者用于组织包中的各种文件，后者则用于描述包的相关信息，以供外部读取分析。
 
 ## 包结构
 
@@ -24,6 +24,10 @@ CommonJS 的包规范的定义由包结构和包描述文件两个部分组成�
 - `lib`：用于存放 JavaScript 代码的目录
 - `doc`：用于存放文档的目录
 - `test`：用于存放单元测试用例的代码
+
+### bin
+
+### lib
 
 ## 包描述文件
 
@@ -61,174 +65,243 @@ NPM 包规范额外的字段：
 - `bin`：一些包作者希望包可以作为命令行工具使用。配置好 bin 字段后，通过 `npm install package_name -g` 命令可以将脚本添加到执行路径中，之后可以在命令行中直接执行
 - `main`：模块引入方法 `require()` 在引入包的时，会优先检查这个字段，并将其作为保重其余模块的入口
 
-## 潜在问题
+### name
 
-临时使用
+`name` 字段字段定义了模块的名称，其命名时需要遵循官方的一些规范和建议：
 
-```bash
-npm --registry https://registry.npm.taobao.org install express
-```
+- 模块名会成为模块 URL、命令行中的一个参数或者一个文件夹名称，任何非 URL 安全的字符在模块名中都不能使用（我们可以使用 [validate-npm-package-name](https://www.npmjs.com/package/validate-npm-package-name) 包来检测模块名是否合法）；
+- 语义化模块名，可以帮助开发者更快的找到需要的模块，并且避免意外获取错误的模块；
+- 若模块名称中存在一些符号，将符号去除后不得与现有的模块名重复，例如：由于 `react-router-dom` 已经存在，`react.router.dom`、`reactrouterdom` 都不可以再创建。
 
-持久使用
-
-```bash
-npm config set registry https://registry.npm.taobao.org
-```
-
-## 构建配置包设计
-
-构建配置抽离成 npm 包意义
-
-- 通用型
-  - 业务开发者无需关注构建配置
-  - 统一团队构建脚本
-- 可维护性
-  - 构建配置合理的拆分
-  - README 文档、ChangeLog 文档等
-- 质量
-  - 冒烟测试、单元测试、测试覆盖率
-  - 持续集成
-
-### 构建配置管理的可选方案
-
-通过多个配置文件管理不同环境的构建，`webpack --config` 参数进行控制
-
-将构建配置设计成一个库，比如：`hij-webpack`、`Neutrino`、`webpack-blocks`
-
-抽成一个工具进行管理，比如 `create-react-app`、`kyt`、`nwb`
-
-将所有的配置放在一个文件，通过 `--env` 参数控制分支选择
-
-### 设计方案
-
-通过多个配置文件管理不同环境的 Webpack 配置
-
-- 基础配置：webpack.base.js
-- 开发环境：webpack.dev.js
-- 生产环境：webpack.prod.js
-- SSR 环境：webpack.ssr.js
-
-抽离成一个 npm 包统一管理：
-
-- 规范：Git Commit 日志、README、ESlint 规范、Semver 规范
-- 质量：冒烟测试、单元测试、测试覆盖率和 CI
-
-### webpack-merge 组合配置
-
-```js
-const merge = require('webpack-merge')
-
-merge(
-    { a: [1], b: 5, c: 20 },
-    { a: [2], b: 10, d: 421 }
-);
-
-{ a: [1, 2], b: 10, c: 20, d: 421 }
-
-// 合并配置
-module.exports = merge(baseConfig, devConfig);
-```
-
-## 功能模块设计和目录结构
-
-## 使用 ESLint 规范构建脚本
-
-## 冒烟测试
-
-冒烟测试是指对提交测试的软件在进行详细深入的测试之前而进行的预测试，这种预测试的主要目的是暴露导致软件需重新发布的基本功能失效等严重问题。
-
-## 单元测试测试覆盖率
-
-## 持续集成和 Travis CI
-
-持续集成的作用
-
-优点：
-
-- 快速发现错误
-- 防止分支大幅度偏离主干
-
-核心措施是，代码集成到主干之前，必须通过自动化测试。只要有一个测试用例失败，就不能集成。
-
-## 发布构建包到 npm 社区
-
-添加用户：npm adduser
-
-升级版本：
-
-- 升级补丁版本：npm version patch
-- 升级小版本号：npm version minor
-- 升级大版本号：npm version major
-
-发布版本：npm publish
-
-## Git Commit 规范和 ChangeLo 生成
-
-cz-cli（The commitizen command line utility）
-每次 git cz 代替 git commit，会自动运行交互程序，填空，就能创建规范的 commit log 信息
-https://github.com/commitizen/cz-cli
-
-commitlint
-
-husky -> `commit-msg` -> `pre-commit`
+`name` 字段不能与其他模块名重复，我们可以执行以下命令查看模块名是否已经被使用：
 
 ```bash
-npm install husky
+npm view <package-name>
 ```
 
-通过 commit-msg 钩子校验信息：
+- 如果模块存在，可以查看该模块的基本信息
+- 如果该模块名称未被使用过，则会抛出 404 错误
+
+### version
+
+`npm` 包中的模块版本都需要遵循 SemVer 规范，该规范的标准版本号采用 `X.Y.Z` 的格式，其中 `X`、`Y` 和 `Z` 均为 **非负的整数**，且 **禁止在数字前方补零**：
+
+- `X` 是主版本号（major）：修改了不兼容的 API
+- `Y` 是次版本号（minor）：新增了向下兼容的功能
+- `Z` 为修订号（patch）：修正了向下兼容的问题
+
+当某个版本改动比较大、并非稳定而且可能无法满足预期的兼容性需求时，我们可能要先发布一个先行版本。
+
+先行版本号可以加到主版本号.次版本号.修订号的后面，通过 - 号连接一连串以句点分隔的标识符和版本编译信息：
+
+- 内部版本（alpha）
+- 公测版本（beta）
+- 正式版本的候选版本 `rc`（即 Release candiate）
+
+我们可以执行以下命令查看模块的版本：
+
+```bash
+# 查看某个模块的最新版本
+npm view <package-name> version
+
+# 查看某个模块的所有历史版本
+npm view <package-name> versions
+```
+
+### 描述信息 description & keywords
+
+`description` 字段用于添加模块的描述信息，便于用户了解该模块。
+
+`keywords` 字段用于给模块添加关键字。
+
+当我们使用 npm 检索模块时，会对模块中的 `description` 字段和 `keywords` 字段进行匹配，写好 `package.json` 中的 `description` 和 `keywords` 将有利于增加我们模块的曝光率。
+
+### 项目依赖 dependencies & devDependencies & peerDependencies
+
+#### dependencies
+
+`dependencies` 字段指定了项目运行所依赖的模块（生产环境使用），如 `antd`、`react`、`moment` 等依赖库：
+
+- 它们是我们生产环境所需要的依赖项，在把项目作为一个 `npm` 包的时候，用户安装 `npm` 包时只会安装 `dependencies` 里面的依赖。
+
+#### devDepenedencies
+
+`devDependencies` 字段指定了项目开发所需要的模块（开发环境使用），如 `webpack`、`typescript`、`babel` 等：
+
+- 在代码打包提交线上时，我们并不需要这些依赖包，所以我们将它放入 `devDependencies` 中。
+
+### peerDepenencies
+
+`peerDependencies` 字段的目的是提示宿主环境去安装满足插件 `peerDependencies` 所指定依赖的包，然后在插件 `import` 或者 `require` 所依赖的包的时候，永远都是引用宿主环境统一安装的 `npm` 包，最终解决插件与所依赖包不一致的问题。
+
+举个例子，就拿目前基于 React 的 UI 组件库 `ant-design@4.x` 来说，因该 UI 组件库只是提供一套 React 组件库，它要求宿主环境需要安装指定的 React 版本。具体可以看它 `package.json` 中的配置：
 
 ```json
 {
-  "scripts": {
-    "commit-msg": "validate-commit-msg",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
-  },
-  "devDependencies": {
-    "validate-commit-msg": "^2.11.1",
-    "conventional-changelog-cli": "^1.2.0",
-    "husky": "^0.13.1"
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   }
 }
 ```
 
-## 语义化版本（SemanticVersioning）规范格式
+它要求宿主环境安装 `react@>=16.9.0` 和 `react-dom@>=16.9.0` 的版本，而在每个 `antd` 组件的定义文件顶部：
 
-开源项目版本信息案例
+```ts
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+```
 
-软件的版本通常由三位组成，形如：
+组件中引入的 `react` 和 `react-dom` 包其实都是宿主环境提供的依赖包。
 
-X.Y.Z
+有了 `package.json` 文件，开发直接使用 `npm install` / `yarn install` 命令，就会在当前目录中自动安装所需要的模块，安装完成项目所需的运行和开发环境就配置好了。
 
-版本是严格递增的，此处是：
+### 简化终端命令 scripts
 
-16.2.0 -> 16.3.0 -> 16.3.1
+`scripts` 字段是 `package.json` 中的一种元数据功能，它接受一个对象，对象的属性为可以通过 `npm run` 运行的脚本，值为实际运行的命令（通常是终端命令），如：
 
-在发布重要版本时，可以发布 alpha、rc 等先行版本
+```json
+{
+  "scripts": {
+    "start": "node index.js"
+  }
+}
+```
 
-- alpha 内部灰度
-- beta 外部小范围
-- rc 公测
+将终端命令放入 `scripts` 字段，既可以记录它们又可以实现轻松重用。
 
-### 遵守 semver 规范的优势
+### 定义项目入口 main
 
-优势：
+`main` 字段是 `package.json` 中的另一种元数据功能，它可以用来指定加载的入口文件。假如你的项目是一个 `npm` 包，当用户安装你的包后，`require('my-module')` 返回的是 `main` 字段中所列出文件的 `module.exports` 属性。
 
-- 避免出现循环依赖
-- 依赖冲突减少
+当不指定 `main` 字段时，默认值是模块根目录下面的 `index.js` 文件。
 
-### 语义化版本（Semantic Versioning）规范格式
+### 发布文件配置 files
 
-主版本号：当你做了不兼容的 API 修改
+`files` 字段用于描述我们使用 `npm publish` 命令后推送到 `npm` 服务器的文件列表，如果指定文件夹，则文件夹内的所有内容都会包含进来。
 
-次版本号：当你做了向下兼容的功能性新增
+我们可以查看下载的 `antd` 的 `package.json` 的 `files` 字段，内容如下：
 
-修订号：当你做了向下兼容的问题修正
+```json
+{
+  "files": ["dist", "lib", "es"]
+}
+```
 
-### 先行版本号
+另外，我们还可以通过配置一个 `.npmignore` 文件来排除一些文件， 防止大量的垃圾文件推送到 npm 上。
 
-先行版本号可以作为发布正式版之前的版本，格式是在修订版本号后面加上一个连接号（`-`），再加上一连串以点（`.`）分割的标识符，标识符可以由英文、数字和连接号（`[0-9A-Za-z]`）组成
+### 定义私有模块 private
 
-- alpha：内部测试版，一般不向外部发布，会有很多 BUG，一般只有测试人员使用。
-- beta：也是测试版本，这个阶段的版本会一直加入新的功能，在 Alpha 版之后推出
-- rc：Release Candidate 系统平台上就是发行候选版本。RC 版不会再加入新的功能了，主要着重于除错。
+一般公司的非开源项目，都会设置 `private` 属性的值为 `true`，这是因为 `npm` 拒绝发布私有模块，通过设置该字段可以防止私有模块被无意间发布出去。
+
+### 指定模块适用系统 os
+
+假如我们开发了一个模块，只能跑在 `darwin` 系统下，我们需要保证 `windows` 用户不会安装到该模块，从而避免发生不必要的错误。
+
+这时候，使用 `os` 属性则可以帮助我们实现以上的需求，该属性可以指定模块适用系统的系统，或者指定不能安装的系统黑名单（当在系统黑名单中的系统中安装模块则会报错）：
+
+```json
+{
+  // 适用系统
+  "os": ["darwin", "linux"],
+  // 黑名单
+  "os": ["!win32"]
+}
+```
+
+> Tips：在 node 环境下可以使用 `process.platform` 来判断操作系统。
+
+### 指定模块适用 CPU 架构 cpu
+
+和上面的 `os` 字段类似，我们可以用 `cpu` 字段更精准的限制用户安装环境：
+
+```json
+{
+  // 适用 CPU
+  "cpu": ["x64", "ia32"],
+  // 黑名单
+  "cpu": ["!arm", "!mips"]
+}
+```
+
+> Tips：在 node 环境下可以使用 `process.arch` 来判断 cpu 架构。
+
+### 指定项目 Node 版本 engines
+
+有时候，新拉一个项目的时候，由于和其他开发使用的 `node` 版本不同，导致会出现很多奇奇怪怪的问题（如某些依赖安装报错、依赖安装完项目跑步起来等）。
+
+为了实现项目开箱即用的伟大理想，这时候可以使用 `package.json` 的 `engines` 字段来指定项目 `node` 版本：
+
+```json
+{
+  "engines": {
+    "node": ">=8.16.0"
+  }
+}
+```
+
+该字段也可以指定适用的 `npm` 版本：
+
+```json
+{
+  "engines": {
+    "npm": ">= 6.9.0"
+  }
+}
+```
+
+需要注意的是，`engines` 属性仅起到一个说明的作用，当用户版本不符合指定值时也不影响依赖的安装。
+
+### 自定义命令 bin
+
+用过 `vue-cli` 或 `create-react-app` 等脚手架的朋友们，不知道你们有没有好奇过，为什么安装这些脚手架后，就可以使用类似 `vue create`/`create-react-app` 之类的命令，其实这和 `package.json` 中的 `bin` 字段有关。
+
+`bin` 字段用来指定各个内部命令对应的可执行文件的位置。当 `package.json` 提供了 `bin` 字段后，即相当于做了一个命令名和本地文件名的映射。
+
+当用户安装带有 `bin` 字段的包时，
+
+- 如果是全局安装，`npm` 将会使用符号链接把这些文件链接到 `/usr/local/node_modules/.bin/`
+- 如果是本地安装，会链接到 `./node_modules/.bin/`
+
+举个例子，如果要使用 `my-app-cli` 作为命令时，可以配置以下 `bin` 字段：
+
+```json
+{
+  "bin": {
+    "my-app-cli": "./bin/cli.js"
+  }
+}
+```
+
+上面代码指定，`my-app-cli` 命令对应的可执行文件为 `bin` 子目录下的 `cli.js`，因此在安装了 `my-app-cli` 包的项目中，就可以很方便地利用 `npm` 执行脚本：
+
+```json
+{
+  "scripts": {
+    "start": "node node_modules/.bin/my-app-cli"
+  }
+}
+```
+
+咦，怎么看起来和 `vue create`/c`reate-react-app` 之类的命令不太像？原因：
+
+- 当需要 `node` 环境时就需要加上 `node` 前缀
+- 如果加上 `node` 前缀，就需要指定 `my-app-cli` 的路径 -> `node_modules/.bin`，否则 `node my-app-cli` 会去查找当前路径下的 `my-app-cli.js`，这样肯定是不对。
+
+若要实现像 `vue create`/`create-react-app` 之类的命令一样简便的方式，则可以在上文提到的 `bin` 子目录下可执行文件 `cli.js` 中的第一行写入以下命令：
+
+```js
+#!/usr/bin/env node
+
+```
+
+这行命令的作用是告诉系统用 `node` 解析，这样命令就可以简写成 `my-app-cli` 了。
+
+### 自定义字段
+
+## package-lock
+
+## 参考资料
+
+- [重新认识 package.json](https://juejin.cn/post/6844904159226003463)
+- [一文搞懂 peerDependencies](https://segmentfault.com/a/1190000022435060)

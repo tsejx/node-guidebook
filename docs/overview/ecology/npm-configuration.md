@@ -6,17 +6,16 @@ group:
   title: 生态
   order: 3
 title: npm 配置文件
-order: 3
+order: 4
 ---
 
 # 配置文件
 
-- npmrc
+- .npmrc
 - .npmignore
 - .npm
 
-## npmrc
-
+## .npmrc
 
 ```bash
 # 查看 .npmrc 文件在哪里
@@ -48,3 +47,8 @@ npm config get prefix
 - MacOS 系统下路径是：`/usr/local/lib/node_modules/`
 
 当然对于全局包路径的查看，还可以使用下面的命令：`npm root -g`
+
+## .npmignore
+
+## .npm
+

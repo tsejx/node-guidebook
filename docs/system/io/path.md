@@ -11,11 +11,15 @@ order: 11
 
 # Path 路径
 
-Node.js 中分为**相对路径**和**绝对路径**两种，相对路径表示当前目录层级对于目标的位置，而绝对路径表示目标当前所在的位置。
+Node.js 中分为 **相对路径** 和 **绝对路径** 两种，相对路径表示当前目录层级对于目标的位置，而绝对路径表示目标当前所在的位置。
 
-## 相对路径
+## 路径类型
 
-- `./` 表示当前目录，不使用 `require` 时，与 `process.cwd()` 一样，使用 `require` 时，与 `__dirname` 一样
+### 相对路径
+
+- `./` 表示当前目录
+  - 使用 `require` 时，与 `__dirname` 一样
+  - 不使用 `require` 时，与 `process.cwd()` 一样
 - `../` 表示上层目录
 
 只有在 `require()` 时才使用相对路径的写法，其它地方一律使用绝对路径。
@@ -28,10 +32,10 @@ path.dirname(__filename) + '/path.js';
 path.resolve(__dirname) + '../regexp/regexp.js';
 ```
 
-## 绝对路径
+### 绝对路径
 
-- `__dirname` 被执行的 JavaScript 文件所在目录的绝对路径
-- `__filename` 被执行的 JavaScript 文件的绝对路径
+- `__dirname` 表示被执行的 JavaScript 文件所在目录的绝对路径
+- `__filename` 表示被执行的 JavaScript 文件的绝对路径
 - `process.cwd()` 当前 Node 命令执行时所在的文件夹的绝对路径
 
 ## 常用方法

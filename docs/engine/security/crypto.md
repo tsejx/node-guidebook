@@ -11,6 +11,8 @@ order: 1
 
 # 加密
 
+Node.js 中的 Crypto 加密模块
+
 1. 摘要（hash）、基于摘要的消息验证码（HMAC）
 2. 对称加密、非对称加密、电子签名
 3. 分组加密模式
@@ -32,7 +34,7 @@ digest = Hash(message)
 - SHA256：256 位
 - SHA512：512 位
 
-🌰 **示例：**
+**示例：**
 
 ```js
 const crypto = require('crypto');
@@ -54,7 +56,7 @@ MAC 可以有多种不同的实现方式，比如 HMAC。
 
 HMAC（Hash-based Message Authentication Code）：可以粗略地理解位带密钥的 hash 函数。
 
-🌰 **示例：**
+**示例：**
 
 ```js
 const crypto = require('crypto');
@@ -91,7 +93,7 @@ encryptedText = encrypt(plainText, encryptKey) plainText = decrypt(encryptedText
 
 常见的对称加密算法：DES、3DES、AES、Blowfish、RC5、IDEA。
 
-🌰 **示例：**加解密
+**示例：** 加解密
 
 ```js
 // 加密
@@ -109,7 +111,7 @@ const plainText = decrypt(encryptedText, key);
 
 常见的非对称加密算法：RSA、DSA、ElGamal。
 
-🌰 **示例：**
+**示例：**
 
 ```js
 // 加密
@@ -146,7 +148,7 @@ const plainText = decrypt(encryptedText, priviteKey);
 2. 通过私钥对摘要进行签名，得到电子签名
 3. 将原始信息、电子签名，发送给接收方
 
-🌰 **示例：**
+**示例：**
 
 ```js
 // 计算摘要

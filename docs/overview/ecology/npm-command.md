@@ -6,7 +6,7 @@ group:
   title: 生态
   order: 3
 title: npm 脚本命令
-order: 2
+order: 3
 ---
 
 # npm cli 命令
@@ -210,10 +210,18 @@ npm rm vue --no-save
 
 `npm ls`此命令将以树状结构将已安装的软件包的所有版本及其依赖项打印到标准输出。
 
-如果想看项目中使用了哪些模块：
-
 ```bash
+# 查看当前仓库使用模块（嵌套）
 npm ls
+
+# 查看当前仓库使用模块（仅单层）
+npm ls --depth 0
+
+# 查看全局模块包已安装模块
+npm ls -g
+
+# 查看全局模块包已安装模块（仅单层）
+npm ls -g --depth 0
 ```
 
 ## 过期依赖枚举
@@ -298,4 +306,18 @@ npm outdated
 
 # 以 JSON 形式输出
 npm outdated --json
+```
+
+## 设置镜像源
+
+临时使用
+
+```bash
+npm --registry https://registry.npm.taobao.org install express
+```
+
+持久使用
+
+```bash
+npm config set registry https://registry.npm.taobao.org
 ```

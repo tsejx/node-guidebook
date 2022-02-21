@@ -160,7 +160,7 @@ const path = require('path');
 
 const originFile = path.resolve(__dirname, 'data.txt');
 
-fs.readFile(originFile, function(err, data) {
+fs.readFile(originFile, function (err, data) {
   if (err) throw err;
 
   // 得到文件内容
@@ -168,7 +168,7 @@ fs.readFile(originFile, function(err, data) {
 
   // 写入文件
   const targetFile = path.resolve(__dirname, 'copy.txt');
-  fs.write(targetFile, dataStr, function(err) {
+  fs.write(targetFile, dataStr, function (err) {
     if (err) throw err;
 
     console.log('拷贝成功!');
@@ -288,7 +288,7 @@ function mkdirRecurAsync(dir, callback) {
     }
 
     let parent = parts.slice(0, i++).join(path.sep);
-    fs.access(parent, err => {
+    fs.access(parent, (err) => {
       if (err) {
         fs.mkdir(parent, next);
       } else {
@@ -354,7 +354,7 @@ function rmDfsSync(dir) {
     } else {
       let files = fs.readdirSync(dir);
 
-      files.map(file => path.join(dir, file)).forEach(item => rmDfsSync(item));
+      files.map((file) => path.join(dir, file)).forEach((item) => rmDfsSync(item));
 
       fs.rmdirSync(dir);
     }
@@ -377,8 +377,8 @@ function rmPromise(dir) {
 
       if (stat.isDirectory()) {
         fs.readdir(dir, (err, files) => {
-          let paths = files.map(file => path.join(dir, file));
-          let promises = paths.map(p => rmPromise(p));
+          let paths = files.map((file) => path.join(dir, file));
+          let promises = paths.map((p) => rmPromise(p));
           Promise.all(promises).then(() => fs.rmdir(dir, resolve));
         });
       } else {
@@ -406,7 +406,7 @@ function rmDfsAsyncSeries(dir, callback) {
 
       if (stat.isDirectory()) {
         fs.readdir(dir, (err, files) => {
-          let paths = files.map(file => path.join(dir, file));
+          let paths = files.map((file) => path.join(dir, file));
 
           function next(index) {
             if (index >= files.length) return fs.rmDir(dir, callback);
@@ -423,7 +423,7 @@ function rmDfsAsyncSeries(dir, callback) {
 }
 
 console.time('COST');
-rmsAsyncSeries(path.join(__dirname, 'foo'), err => {
+rmsAsyncSeries(path.join(__dirname, 'foo'), (err) => {
   console.timeEnd('COST');
 });
 ```
@@ -441,7 +441,7 @@ function rmDfsAsyncParallel(dir, callback) {
 
       if (stat.isDirectory()) {
         fs.readdir(dir, (err, files) => {
-          let paths = files.map(file => path.join(dir, file));
+          let paths = files.map((file) => path.join(dir, file));
 
           if (paths.length > 0) {
             let i = 0;
@@ -450,7 +450,7 @@ function rmDfsAsyncParallel(dir, callback) {
                 fs.rmdir(dir, callback);
               }
             }
-            paths.forEach(p => rmDfsAsyncParallel(p, done));
+            paths.forEach((p) => rmDfsAsyncParallel(p, done));
           } else {
             fs.rmdir(dir, callback);
           }
@@ -463,7 +463,7 @@ function rmDfsAsyncParallel(dir, callback) {
 }
 
 console.time('COST');
-rmDfsAsyncParallel(path.join(__dirname, 'foo'), err => {
+rmDfsAsyncParallel(path.join(__dirname, 'foo'), (err) => {
   console.timeEnd('COST');
 });
 ```
@@ -484,7 +484,7 @@ function rmBfsSync(dir) {
 
     if (stat.isDirectory()) {
       let dirs = fs.readdirSync(current);
-      arr = [...arr, ...dir.map(d => path.join(current, d))];
+      arr = [...arr, ...dir.map((d) => path.join(current, d))];
     }
   }
 
@@ -528,7 +528,7 @@ function rmBfsAsync(dir, callback) {
 
         if (stat.isDirectory()) {
           fs.readdir(current, (err, files) => {
-            dirs = [...dirs, ...files.map(item => path.join(current, item))];
+            dirs = [...dirs, ...files.map((item) => path.join(current, item))];
             next();
           });
         } else {
@@ -564,7 +564,7 @@ const fs = require('fs');
 const path = require('path');
 
 function dfsSync(dir) {
-  fs.readdirSync(dir).forEach(file => {
+  fs.readdirSync(dir).forEach((file) => {
     let child = path.join(dir, file);
 
     let stat = fs.statSync(child);
@@ -618,7 +618,7 @@ function bfsSync(dir) {
     let stat = fs.statSync(current);
     if (stat.isDirectory()) {
       let files = fs.readdirSync(current);
-      files.forEach(item => {
+      files.forEach((item) => {
         dirs.push(path.join(current, item));
       });
     }
@@ -649,32 +649,3 @@ function bfsAsync(dir, cb) {
   });
 }
 ```
-
-## 社区生态
-
-社区中维护了一些拓展了文件系统功能的模块方法。
-
-- graceful-fs
-- mock-fs
-- `lockfile`：文件锁定是在同一时间只允许一个进程去操作文件
-- globby：User-friendly glob matching
-- cpy：Copy files
-- cpy-cli：Copy files on the command-line
-- make-dir：Make a direactory and its parents if needed - Think `mkdir -p`
-- move-file：Move a file
-- del：Delete files and directories
-- rimraf
-- chokidar
-- find-up
-- proper-lockfile
-- load-json-file
-- write-json-file
-- fs-write-stream-atomic
-- filenamify
-- lnfs
-- istextorbinary
-- fs-jetpack
-- fs-extra
-- pkg-dir
-- filehound
-- tempy

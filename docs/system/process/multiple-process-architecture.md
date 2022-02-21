@@ -24,12 +24,12 @@ process.title = 'node-master';
 const workers = {};
 const createWorker = () => {
   const worker = fork('worker.js');
-  worker.on('message', function(message) {
+  worker.on('message', function (message) {
     if (message.act === 'suicide') {
       createWorker();
     }
   });
-  worker.on('exit', function(code, signal) {
+  worker.on('exit', function (code, signal) {
     console.log('worker process exited, code: %s signal: %s', code, signal);
     delete workers[worker.pid];
   });
@@ -85,19 +85,19 @@ const server = http.createServer((req, res) => {
 
 let worker;
 process.title = 'node-worker';
-process.on('message', function(message, sendHandle) {
+process.on('message', function (message, sendHandle) {
   if (message === 'server') {
     worker = sendHandle;
-    worker.on('connection', function(socket) {
+    worker.on('connection', function (socket) {
       server.emit('connection', socket);
     });
   }
 });
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
   console.log(err);
   process.send({ act: 'suicide' });
-  worker.close(function() {
+  worker.close(function () {
     process.exit(1);
   });
 });
@@ -110,6 +110,17 @@ process.on('uncaughtException', function(err) {
 > 多进程或多个 Web 服务之间的状态共享问题？
 
 多进程模式下各个进程之间是相互独立的，例如用户登录之后 session 的保存，如果保存在服务进程里，那么如果我有 4 个工作进程，每个进程都要保存一份是没必要的，假设服务重启了数据也会丢失。多个 Web 服务也是一样的，还会出现我在 A 机器上创建了 Session，当负载均衡分发到 B 机器上之后还需要再创建一份。一般的做法是通过 Redis 或者数据库来做数据共享。
+
+## 多进程 vs 多线程
+
+| 属性       | 多进程                                           | 多线程                                   | 比较           |
+| :--------- | :----------------------------------------------- | :--------------------------------------- | :------------- |
+| 数据       | 数据共享复杂，需要用 IPC；数据是分开的，同步简单 | 因为共享进程数据，数据共享简单，同步复杂 | 各有千秋       |
+| CPU、内存  | 占用内存多，切换复杂，CPU 利用率低               | 占用内存少，切换简单，CPU 利用率高       | 多线程更好     |
+| 销毁、切换 | 创建销毁、切换复杂，速度慢                       | 创建销毁、切换简单，速度很快             | 多线程更好     |
+| coding     | 编码简单、调试方便                               | 编码、调试复杂                           | 编码、调试复杂 |
+| 可靠性     | 进程独立运行，不会互相影响                       | 线程同呼吸共命运                         | 多进程更好     |
+| 分布式     | 可用于多机多核分布式，易于扩展                   | 只能用于多核分布式                       | 多进程更好     |
 
 ---
 
