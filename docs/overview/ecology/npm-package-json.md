@@ -11,7 +11,7 @@ order: 1
 
 # NPM 包描述文件
 
-`npm` 即 npde package module
+`npm` 即 node package module
 
 CommonJS 的包规范的定义由 **包结构** 和 **包描述文件** 两个部分组成，前者用于组织包中的各种文件，后者则用于描述包的相关信息，以供外部读取分析。
 
