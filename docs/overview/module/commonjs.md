@@ -315,7 +315,7 @@ Module._load = function(request, parent, isMain) {
 Node 缓存的是编译和执行后的对象：
 
 - 相同
-  - Node 模块和非 Node 墨菊爱经历的过程都是，有执行后的缓存对象，返回缓存对象
+  - Node 模块和非 Node 模块经历的过程都是，有执行后的缓存对象，返回缓存对象
   - 没有执行后的缓存对象，创建 `module` 对象，执行模块，存储执行后得到的对象，返回执行后的结果 `exports`
 - 不同
   - 缓存对象不同
